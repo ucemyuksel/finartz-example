@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Finartz-Example</title>
+    <!-- CSS file -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts Roboto -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <!-- JQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
+</head>
+<body>
+    
+    <div class="center">
+        <p>Aramak istediğiniz Film adını giriniz:</p>
+        <input type="text" id="search">
+        <button type="submit" id="btnGet">Ara</button>
+    </div>
+    <div class="content center">
+        
+    </div>
+
+    <script>
+        var ul = $("#list");
+        var url = "http://www.omdbapi.com/";
+        url += '?' + $.param({
+            'apikey': "63f944af"
+        });
+        
+        $("#btnGet").click(function () {
+            var content = $(".content");
+            content.empty();
+            var search = $("#search").val();
+            search = "&t=" + search;
+            
+            $.ajax({
+               method: "GET",
+               url: url+search
+           }).done(function(data){
+               if(data.Error != null){
+                    alert(data.Error);
+               }else{
+                var headerOne = $("<h1></h1>");
+                var rating = $("<h2></h2>");
+                headerOne.text("Film Adı : " + data.Title);
+                rating.text("Puanı : " + data.Ratings[0].Value);
+                var images = $("<img>").attr('src', data.Poster);
+                content.append(headerOne, rating, images); 
+               }
+    
+           }).fail(function(){
+               alert("Bir Hata oluştu");
+           })
+        })
+    </script>
+
+</body>
+</html>
+
